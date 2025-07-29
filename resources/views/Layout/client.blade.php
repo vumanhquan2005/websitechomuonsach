@@ -8,6 +8,7 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background: #f7fafc;
@@ -35,21 +36,48 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarClient">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('books.index') }}">Tất cả Sách</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}">Thể loại</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('borrow_records.index') }}">Lịch sử mượn</a>
+                    <li class="nav-item"><a class="nav-link" href="">Tất cả Sách</a></li>
+                    <li class="nav-item"><a class="nav-link" href="">Thể loại</a></li>
+                    <li class="nav-item"><a class="nav-link" href="">Lịch sử mượn</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     @auth
-                        <li class="nav-item"><span class="nav-link"><i class="bi bi-person-circle"></i>
-                                {{ auth()->user()->name }}</span></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('logout') }}">Đăng xuất</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                                id="dropdownAccount" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                @if (auth()->user()->role === 'admin')
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-speedometer2"></i> Đến trang quản trị
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                @endif
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Đăng ký</a></li>
                     @endauth
                 </ul>
+
             </div>
         </div>
     </nav>
@@ -58,7 +86,6 @@
     <div class="container">
         @yield('contents')
     </div>
-
     <!-- Footer -->
     <footer class="main-footer text-center">
         &copy; {{ date('Y') }} - Hệ thống mượn sách online | FPT Polytechnic
@@ -67,6 +94,19 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @yield('js')
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+
+
 </body>
 
 </html>

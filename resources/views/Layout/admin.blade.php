@@ -56,10 +56,33 @@
                 <a href="" class="nav-link d-inline-block {{ request()->is('users*') ? 'active' : '' }}">Người
                     dùng</a>
             </nav>
-            <div>
-                <span class="me-2"><i class="bi bi-person-circle"></i> Admin</span>
-                <a href="" class="btn btn-sm btn-warning">Đăng xuất</a>
+            <div class="dropdown">
+                <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
+                    id="dropdownAccount" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle fs-5 me-2"></i>
+                    {{ auth()->user()->name ?? 'Admin' }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                    <li>
+                        <a class="dropdown-item" href="{{ url('/') }}">
+                            <i class="bi bi-house"></i> Về trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <!-- Logout phải là POST như hướng dẫn trước -->
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger">
+                                <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
+
         </div>
     </header>
 
