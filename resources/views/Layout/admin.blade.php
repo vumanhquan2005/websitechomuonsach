@@ -92,7 +92,8 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link {{ request()->routeIs('admin.books.*') ? 'active' : '' }}" href="">
+                    <a class="nav-link {{ request()->routeIs('admin.book.*') ? 'active' : '' }}"
+                        href="{{ route('admin.book.index') }}">
                         <i class="bi bi-journal-bookmark"></i> Sách
                     </a>
                 </li>
