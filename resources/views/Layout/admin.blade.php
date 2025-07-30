@@ -3,100 +3,148 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Quản trị hệ thống mượn sách')</title>
+    <title>@yield('title', 'Trang quản trị')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap 5 CDN -->
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Optionally, dùng icon -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            background: #f6f8fa;
+            background: #f7fafc;
         }
 
-        .main-header {
-            background: #343a40;
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: #fff;
-            padding: 15px 0;
-            margin-bottom: 24px;
+        }
+
+        .sidebar .nav-link {
+            color: #fff;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background: rgba(0, 0, 0, 0.13);
+            color: #fff;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .main-footer {
-            background: #222;
-            color: #aaa;
-            padding: 15px 0;
-            margin-top: 36px;
+            background: #212529;
+            color: #bbb;
+            padding: 16px 0;
+            margin-top: 32px;
         }
 
-        .nav-link {
-            color: #fff !important;
+        .header-admin {
+            height: 64px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px 0 16px;
         }
 
-        .nav-link.active,
-        .nav-link:hover {
-            color: #ffc107 !important;
+        .header-admin .dropdown-toggle {
+            background: none;
+            border: none;
+            color: #333;
+            font-weight: 600;
+            box-shadow: none !important;
+        }
+
+        .header-admin .dropdown-menu {
+            min-width: 180px;
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="main-header">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div>
-                <i class="bi bi-book-half"></i>
-                <span class="fs-4 fw-bold ms-2">Trang Quản Trị Mượn Sách</span>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar p-3" style="width: 240px;">
+            <div class="mb-4 text-center">
+                <img src="/logo.png" alt="Logo" style="height: 54px;">
+                <div class="logo mt-2">Mượn Sách Admin</div>
             </div>
-            <nav>
-                <a href=""
-                    class="nav-link d-inline-block {{ request()->is('categories*') ? 'active' : '' }}">Danh mục</a>
-                <a href="" class="nav-link d-inline-block {{ request()->is('books*') ? 'active' : '' }}">Sách</a>
-                <a href=""
-                    class="nav-link d-inline-block {{ request()->is('borrow_records*') ? 'active' : '' }}">Mượn/Trả</a>
-                <a href="" class="nav-link d-inline-block {{ request()->is('users*') ? 'active' : '' }}">Người
-                    dùng</a>
-            </nav>
-            <div class="dropdown">
-                <a class="btn btn-light dropdown-toggle d-flex align-items-center" href="#" role="button"
-                    id="dropdownAccount" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person-circle fs-5 me-2"></i>
-                    {{ auth()->user()->name ?? 'Admin' }}
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                    <li>
-                        <a class="dropdown-item" href="{{ url('/') }}">
-                            <i class="bi bi-house"></i> Về trang chủ
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                        <!-- Logout phải là POST như hướng dẫn trước -->
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="dropdown-item text-danger">
-                                <i class="bi bi-box-arrow-right"></i> Đăng xuất
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                        href="{{ route('admin.dashboard') }}">
+                        <i class="bi bi-bar-chart"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"
+                        href="{{ route('admin.users.index') }}">
+                        <i class="bi bi-people"></i> Người Dùng
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ request()->routeIs('admin.books.*') ? 'active' : '' }}" href="">
+                        <i class="bi bi-journal-bookmark"></i> Sách
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ request()->routeIs('admin.category.*') ? 'active' : '' }}"
+                        href="{{ route('admin.category.index') }}">
+                        <i class="bi bi-tags"></i> Danh Mục
+                    </a>
+                </li>
+                <!-- Thêm mục khác nếu muốn -->
+            </ul>
         </div>
-    </header>
-
-    <!-- Main content -->
-    <div class="container">
-        @yield('contents')
+        <!-- Main content -->
+        <div class="flex-grow-1" style="min-height: 100vh;">
+            <!-- Header Admin -->
+            <div class="header-admin">
+                <h4 class="mb-0">@yield('title')</h4>
+                <div class="dropdown">
+                    <a class="btn dropdown-toggle d-flex align-items-center" href="#" role="button"
+                        id="dropdownAccount" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-5 me-2"></i>
+                        {{ auth()->user()->name ?? 'Admin' }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                        <li>
+                            <a class="dropdown-item" href="{{ url('/') }}">
+                                <i class="bi bi-house"></i> Về trang chủ
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-4">
+                @yield('contents')
+            </div>
+        </div>
     </div>
-
-    <!-- Footer -->
     <footer class="main-footer text-center">
-        &copy; {{ date('Y') }} - Hệ thống mượn sách | FPT Polytechnic
+        &copy; {{ date('Y') }} - Quản trị hệ thống mượn sách | FPT Polytechnic
     </footer>
-
-    <!-- Bootstrap JS (optional) -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @yield('js')
 </body>

@@ -40,5 +40,8 @@ Route::get('/', [HomeController::class, 'index'])->name('client.home');
 // admin
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'store', 'destroy']);
+    Route::resource('category', \App\Http\Controllers\Admin\CategoryController::class);
 });
 // admin
