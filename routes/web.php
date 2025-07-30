@@ -43,7 +43,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'store', 'destroy']);
     Route::resource('category', \App\Http\Controllers\Admin\CategoryController::class);
-    Route::resource('book', \App\Http\Controllers\Admin\BookController::class); // ✅ thêm dòng này
+    Route::resource('book', \App\Http\Controllers\Admin\BookController::class);
+    Route::resource('borrow-records', \App\Http\Controllers\Admin\BorrowRecordController::class)->only(['index']);
+    Route::post('borrow-records/{id}/update-status', [\App\Http\Controllers\Admin\BorrowRecordController::class, 'updateStatus'])->name('borrow-records.update-status');
 });
 
 // admin

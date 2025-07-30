@@ -103,6 +103,12 @@
                         <i class="bi bi-tags"></i> Danh Mục
                     </a>
                 </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link {{ request()->routeIs('admin.borrow-records.*') ? 'active' : '' }}"
+                        href="{{ route('admin.borrow-records.index') }}">
+                        <i class="bi bi-bookmark-check"></i> Phiếu Mượn Sách
+                    </a>
+                </li>
                 <!-- Thêm mục khác nếu muốn -->
             </ul>
         </div>
